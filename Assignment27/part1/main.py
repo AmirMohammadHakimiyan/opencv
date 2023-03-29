@@ -2,14 +2,15 @@ import cv2
 
 import numpy
 cap=cv2.VideoCapture(0)
-_,frame=cap.read()
-satr=frame.shape[0]
-sotoon=frame.shape[1]
-writer=cv2.VideoWriter("result.mp4",cv2.VideoWriter_fourcc(*'MJPG'),30,(satr,sotoon))
+_,frame =cap.read()
+satr = frame.shape[0]
+sotoon = frame.shape[1]
+writer=cv2.VideoWriter("rnmesuult.mp4",cv2.VideoWriter_fourcc(*'XVID'),30,(sotoon,satr))
 while True:
     _,frame=cap.read()
     frame=cv2.cvtColor(frame,cv2.COLOR_RGB2GRAY)
-    satr,sotoon=frame.shape
+    satr = frame.shape[0]
+    sotoon = frame.shape[1]
     w=frame[satr*2//5:satr*3//5,sotoon*2//5:sotoon*3//5]
     kernel=numpy.ones((41,41))/1661
     re_image=cv2.filter2D(frame, -1,kernel)
@@ -24,8 +25,11 @@ while True:
         color="gray"
 
     cv2.putText(re_image,color,(sotoon*2//5,satr*4//5),cv2.FONT_HERSHEY_COMPLEX_SMALL,2,0,3)
+
+
+    
     writer.write(re_image)
     cv2.imshow("result",re_image)
-    if cv2.waitKey(1) & 0xFF==ord("q"):
+    if cv2.waitKey(25) & 0xFF==ord("q"):
         break
 writer.release()
