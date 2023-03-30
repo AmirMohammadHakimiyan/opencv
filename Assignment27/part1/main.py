@@ -5,7 +5,7 @@ cap=cv2.VideoCapture(0)
 _,frame =cap.read()
 satr = frame.shape[0]
 sotoon = frame.shape[1]
-writer=cv2.VideoWriter("rnesuult.mp4",cv2.VideoWriter_fourcc(*'MJPG'),30,(sotoon,satr))
+writer=cv2.VideoWriter("rnesuult.mp4",cv2.VideoWriter_fourcc(*'XVID'),30,(sotoon,satr))
 while True:
     _,frame=cap.read()
     frame=cv2.cvtColor(frame,cv2.COLOR_RGB2GRAY)
@@ -33,5 +33,3 @@ while True:
     if cv2.waitKey(25) & 0xFF==ord("q"):
         break
 writer.release()
-cap.release()
-cv2.destroyAllWindows()
