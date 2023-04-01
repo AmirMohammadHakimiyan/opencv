@@ -5,7 +5,7 @@ frame=cv2.imread("download.jpg")
 frame=cv2.cvtColor(frame,cv2.COLOR_RGB2GRAY)
 rows=frame.shape[0]
 cols=frame.shape[1]
-writer = cv2.VideoWriter("reseeultttt.mp4", cv2.VideoWriter_fourcc(*'XVID'), 30, (cols,rows))
+writer = cv2.VideoWriter("snow.mp4", cv2.VideoWriter_fourcc(*'XVID'), 30, (cols,rows))
 class Snow():
     def __init__(self,satr,sotoon):
         self.satr=satr
@@ -23,6 +23,7 @@ while True:
         if i.satr>=frame.shape[0]:
             i.satr-=2
         frame[i.satr,i.sotoon]=255
+    frame=cv2.cvtColor(frame,cv2.COLOR_GRAY2BGR)
     writer.write(frame)
     cv2.imshow("result",frame)
     frame=cv2.imread("download.jpg")
