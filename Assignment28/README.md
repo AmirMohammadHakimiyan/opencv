@@ -27,3 +27,16 @@ python football.py
 ```
 ## result
 ![](output/football.jpg)
+# face editer 
+it's to put on your face some **edit**.
+## How to install
+Run following commend:
+```
+pip install -r requirements.txt
+```
+## How to Run
+execute this commend in terminal:
+```
+python face_editer.py
+```
+## result
