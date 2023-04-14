@@ -40,3 +40,6 @@ execute this commend in terminal:
 python face_editer.py
 ```
 ## result
+![](output/face_1.jpg)
+![](output/face_3.png)
+![](output/face_2.png)
