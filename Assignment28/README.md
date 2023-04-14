@@ -41,7 +41,7 @@ python face_editer.py
 ```
 ## result
 
-![](output/face_1.jpg)
+![](output/face_1.png)
 
 ![](output/face_3.png)
 
