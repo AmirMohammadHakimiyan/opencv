@@ -3,6 +3,23 @@ import cv2
 from TFLiteFaceDetector import UltraLightFaceDetecion
 from TFLiteFaceAlignment import CoordinateAlignmentModel
 
+
+
+    
+
+def resize(face_roi):
+    roi_landmarks = []
+    for i in face_roi :
+        roi_landmarks.append(pred[i])
+    roi_landmarks = np.array(roi_landmarks , dtype = int )
+    x , y , w , h =  cv2.boundingRect(roi_landmarks)
+    mask =  np.zeros(img.shape , dtype=np.uint8)
+    cv2.drawContours(mask , [roi_landmarks] , -1 , (255,255,255) , -1) 
+    mask = mask // 255 
+    result  = img * mask 
+    croped_lip_result = result[y:y+h , x:x+w]
+    big_roi = cv2.resize(croped_lip_result , (0,0) , fx=2 , fy=2)
+    return big_roi
 def put_resized(orange , lips , left_eye , right_eye):
     faces=face_cas.detectMultiScale(img, 1.2, 5, 0, (120, 120), (350, 350))
     for (x, y, w, h) in faces:
@@ -27,27 +44,7 @@ def put_resized(orange , lips , left_eye , right_eye):
         transparentOverlay(big_eye_left_region , big_eye_left)
         transparentOverlay(big_eye_right_region , big_eye_right)
         transparentOverlay(lips_region , big_lips)
-
     return orange
-
-def ro_resize(face_roi):
-    roi_landmarks = []
-    for i in face_roi :
-        roi_landmarks.append(pred[i])
-    roi_landmarks = np.array(roi_landmarks , dtype = int )
-
-    x , y , w , h =  cv2.boundingRect(roi_landmarks)
-    mask =  np.zeros(img.shape , dtype=np.uint8)
-    cv2.drawContours(mask , [roi_landmarks] , -1 , (255,255,255) , -1) 
-    mask = mask // 255 
-    result  = img * mask 
-    croped_lip_result = result[y:y+h , x:x+w]
-    big_roi = cv2.resize(croped_lip_result , (0,0) , fx=2 , fy=2)
-
-    return big_roi
-
-
-
 def transparentOverlay(src, overlay, pos=(0, 0), scale=1):
     overlay = cv2.resize(overlay, (0, 0), fx=scale, fy=scale)
     h, w, _ = overlay.shape  
@@ -61,7 +58,6 @@ def transparentOverlay(src, overlay, pos=(0, 0), scale=1):
             src[x + i][y + j] = alpha * overlay[i][j][:3] + (1 - alpha) * src[x + i][y + j] 
     return src
 
-
 fad = UltraLightFaceDetecion("OpenVtuber\weights\RFB-320.tflite",conf_threshold=0.88)
 fa = CoordinateAlignmentModel("OpenVtuber\weights\coor_2d106.tflite")
 face_cas = cv2.CascadeClassifier('OpenVtuber\haarcascade_frontalface_default.xml')
@@ -71,23 +67,19 @@ orange = cv2.imread("inputs/orangee.jpg")
 orange = cv2.resize(orange , [680 , 700])
 box, scores = fad.inference(img)
 
-
 lips      = [52 , 64 , 63 , 71 , 67 , 68 , 61 , 58 , 59 , 53 , 56 , 55 ]
 left_eye  = [39 , 37 , 33 , 36 , 35 , 41 , 40 , 42 ]
 right_eye = [95 , 94 , 96 , 93 , 91 , 87 , 90 , 89 ]
 
-
 for pred in fa.get_landmarks(img , box):
 
-    resized_lips      = ro_resize(lips)
-    resized_left_eye  = ro_resize(left_eye)
-    resized_right_eye = ro_resize(right_eye)
-
+    resized_lips      = resize(lips)
+    resized_left_eye  = resize(left_eye)
+    resized_right_eye = resize(right_eye)
     lips      = cv2.imread("resized_lips2.png" , cv2.IMREAD_UNCHANGED)
     left_eye  = cv2.imread("resized_left_eye22.png" , cv2.IMREAD_UNCHANGED)
     right_eye = cv2.imread("resized_right_eye22.png" , cv2.IMREAD_UNCHANGED)
-    
-
 final_result = put_resized(orange , lips , left_eye , right_eye )
+
 cv2.imshow("result", final_result )
-cv2.waitKey()  
+cv2.waitKey()   
